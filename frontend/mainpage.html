@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>TalentTrail</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>TalentTrail</title>
 </head>
-<body class="bg-black">
-    <!-- NAvbar -->
-    <nav class="flex items-center justify-between px-6 py-4 bg-black text-white">
-    
-    <!-- Left Section: Logo + Menu -->
-    <div class="flex items-center space-x-6">
-      <!-- Logo -->
-      <div class="bg-lime-400 text-black font-bold px-2 py-1 rounded text-xl">TalentTrail</div>
+<body class="bg-black text-white font-sans">
 
-      <!-- Menu Links -->
+  <!-- Navbar -->
+  <nav class="flex items-center justify-between px-6 py-4 bg-black text-white">
+    <div class="flex items-center space-x-6">
+      <div class="bg-lime-400 text-black font-bold px-2 py-1 rounded text-xl">TalentTrail</div>
       <ul class="hidden md:flex space-x-6 font-medium text-white">
         <li><a href="#" class="hover:text-lime-400">Students</a></li>
         <li><a href="#" class="hover:text-lime-400">Employers</a></li>
@@ -23,12 +19,65 @@
         <li><a href="#" class="hover:text-lime-400">Company</a></li>
       </ul>
     </div>
-
-    <!-- Right Section: Buttons -->
     <div class="flex items-center space-x-3">
       <button class="border border-white text-white px-4 py-1 rounded hover:border-lime-400 hover:text-lime-400">Sign up</button>
       <button class="bg-lime-400 text-black px-4 py-1 rounded hover:bg-lime-300">Log in</button>
     </div>
   </nav>
+
+  <!-- Hero Section -->
+  <section class="text-center py-20 px-6">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Find Internships and Jobs That Fit You</h1>
+    <p class="text-gray-400 text-lg mb-8">Connecting students, employers, and career centers on one seamless platform.</p>
+    <a href="#" class="bg-lime-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-lime-500 transition">Get Started</a>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-16 px-6">
+    <div class="max-w-6xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-10">Why TalentTrail?</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+        <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800 transition">
+          <h3 class="text-xl font-semibold text-lime-400 mb-2">For Students</h3>
+          <p class="text-gray-400">Find internships and jobs tailored to your skills. Apply easily and track applications.</p>
+        </div>
+        <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800 transition">
+          <h3 class="text-xl font-semibold text-lime-400 mb-2">For Employers</h3>
+          <p class="text-gray-400">Post jobs, screen candidates, and find top student talent quickly.</p>
+        </div>
+        <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800 transition">
+          <h3 class="text-xl font-semibold text-lime-400 mb-2">Career Centers</h3>
+          <p class="text-gray-400">Help your students succeed by tracking job outcomes and sharing opportunities.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="py-16 px-6 border-t border-gray-800">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-6">How It Works</h2>
+      <div class="flex flex-col md:flex-row justify-center items-start gap-10 mt-10">
+        <div class="text-left">
+          <h4 class="text-xl text-lime-400 font-semibold">Step 1: Sign Up</h4>
+          <p class="text-gray-400">Create a profile as a student or employer.</p>
+        </div>
+        <div class="text-left">
+          <h4 class="text-xl text-lime-400 font-semibold">Step 2: Explore</h4>
+          <p class="text-gray-400">Search jobs, internships, or candidates.</p>
+        </div>
+        <div class="text-left">
+          <h4 class="text-xl text-lime-400 font-semibold">Step 3: Apply or Hire</h4>
+          <p class="text-gray-400">Connect with the right people instantly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black border-t border-gray-800 text-center py-6 text-gray-500 text-sm">
+    © 2025 TalentTrail. All rights reserved.
+  </footer>
+
 </body>
 </html>
