@@ -9,70 +9,117 @@
 <body class="bg-black text-white font-sans">
 
   <!-- Navbar -->
-  <nav class="flex items-center justify-between px-6 py-4 bg-black text-white">
+  <nav class="flex items-center justify-between px-6 py-4 bg-black text-white shadow-lg z-10">
     <div class="flex items-center space-x-6">
-      <div class="bg-lime-400 text-black font-bold px-2 py-1 rounded text-xl">TalentTrail</div>
+      <a href="index.html" class="bg-lime-400 text-black font-bold px-3 py-1 rounded text-2xl hover:scale-105 transition">TalentTrail</a>
       <ul class="hidden md:flex space-x-6 font-medium text-white">
-        <li><a href="#" class="hover:text-lime-400">Students</a></li>
-        <li><a href="#" class="hover:text-lime-400">Employers</a></li>
-        <li><a href="#" class="hover:text-lime-400">Career centers</a></li>
-        <li><a href="#" class="hover:text-lime-400">Company</a></li>
+        <li><a href="about.html" class="hover:text-lime-400 transition">About</a></li>
+        <li><a href="students.html" class="hover:text-lime-400 transition">Students</a></li>
+        <li><a href="employers.html" class="hover:text-lime-400 transition">Employers</a></li>
+        <li><a href="company.html" class="hover:text-lime-400 transition">Company</a></li>
+        <li><a href="contact.html" class="hover:text-lime-400 transition">Contact</a></li>
       </ul>
     </div>
     <div class="flex items-center space-x-3">
-      <button class="border border-white text-white px-4 py-1 rounded hover:border-lime-400 hover:text-lime-400">Sign up</button>
-      <button class="bg-lime-400 text-black px-4 py-1 rounded hover:bg-lime-300">Log in</button>
+      <a href="signup.html" class="border border-white text-white px-4 py-1 rounded hover:border-lime-400 hover:text-lime-400 transition">Sign up</a>
+      <a href="login.html" class="bg-lime-400 text-black px-4 py-1 rounded hover:bg-lime-300 transition">Log in</a>
     </div>
   </nav>
 
   <!-- Hero Section -->
-  <section class="text-center py-20 px-6">
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">Find Internships and Jobs That Fit You</h1>
-    <p class="text-gray-400 text-lg mb-8">Connecting students, employers, and career centers on one seamless platform.</p>
-    <a href="#" class="bg-lime-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-lime-500 transition">Get Started</a>
+  <section class="text-center py-24 px-6 bg-gradient-to-b from-black to-gray-900">
+    <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
+      Your Career Starts <span class="text-lime-400">Here</span>
+    </h1>
+    <p class="text-gray-400 text-lg md:text-xl mb-10">
+      Discover internships and job opportunities that match your skills and goals.
+    </p>
+    <a href="signup.html" class="bg-lime-400 text-black px-8 py-3 rounded-full font-semibold text-lg hover:bg-lime-500 transition-all duration-300">
+      Get Started
+    </a>
   </section>
 
   <!-- Features Section -->
-  <section class="py-16 px-6">
-    <div class="max-w-6xl mx-auto text-center">
-      <h2 class="text-3xl font-bold mb-10">Why TalentTrail?</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-        <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800 transition">
-          <h3 class="text-xl font-semibold text-lime-400 mb-2">For Students</h3>
-          <p class="text-gray-400">Find internships and jobs tailored to your skills. Apply easily and track applications.</p>
+  <!-- <section class="py-20 px-6 bg-black">
+    <div class="max-w-7xl mx-auto text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-14 text-white">Why Choose <span class="text-lime-400">TalentTrail?</span></h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-lime-400 transition">
+          <h3 class="text-xl font-semibold text-lime-400 mb-3">For Students</h3>
+          <p class="text-gray-400">Browse internships and jobs that match your profile. Apply with ease and track your applications in one place.</p>
         </div>
-        <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800 transition">
-          <h3 class="text-xl font-semibold text-lime-400 mb-2">For Employers</h3>
-          <p class="text-gray-400">Post jobs, screen candidates, and find top student talent quickly.</p>
+        <div class="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-lime-400 transition">
+          <h3 class="text-xl font-semibold text-lime-400 mb-3">For Employers</h3>
+          <p class="text-gray-400">Post job opportunities and discover top student talent with intuitive tools and smart filtering options.</p>
         </div>
-        <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800 transition">
-          <h3 class="text-xl font-semibold text-lime-400 mb-2">Career Centers</h3>
-          <p class="text-gray-400">Help your students succeed by tracking job outcomes and sharing opportunities.</p>
+        <div class="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-lime-400 transition">
+          <h3 class="text-xl font-semibold text-lime-400 mb-3">Career Centers</h3>
+          <p class="text-gray-400">Empower students with analytics, opportunity sharing, and success tracking—all in one dashboard.</p>
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 
   <!-- How It Works Section -->
-  <section class="py-16 px-6 border-t border-gray-800">
-    <div class="max-w-4xl mx-auto text-center">
-      <h2 class="text-3xl font-bold mb-6">How It Works</h2>
-      <div class="flex flex-col md:flex-row justify-center items-start gap-10 mt-10">
-        <div class="text-left">
-          <h4 class="text-xl text-lime-400 font-semibold">Step 1: Sign Up</h4>
-          <p class="text-gray-400">Create a profile as a student or employer.</p>
+<section class="py-24 px-6 bg-gray-950 border-t border-gray-800">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-4xl md:text-5xl font-bold mb-16">How It <span class="text-lime-400">Works</span></h2>
+    <div class="grid md:grid-cols-3 gap-12 text-left">
+      
+      <!-- Step 1 -->
+      <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 hover:border-lime-400 transition group shadow-lg hover:shadow-lime-500/10">
+        <div class="text-lime-400 text-4xl mb-4">
+          <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2"
+               viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M16 7a4 4 0 01-8 0m8 0a4 4 0 00-8 0m8 0a8 8 0 11-8 0m8 0v1a3 3 0 01-6 0V7m-1 11h8"></path>
+          </svg>
         </div>
-        <div class="text-left">
-          <h4 class="text-xl text-lime-400 font-semibold">Step 2: Explore</h4>
-          <p class="text-gray-400">Search jobs, internships, or candidates.</p>
-        </div>
-        <div class="text-left">
-          <h4 class="text-xl text-lime-400 font-semibold">Step 3: Apply or Hire</h4>
-          <p class="text-gray-400">Connect with the right people instantly.</p>
-        </div>
+        <h3 class="text-2xl font-semibold mb-3 text-white group-hover:text-lime-400 transition">Step 1: Sign Up</h3>
+        <p class="text-lg text-gray-400 leading-relaxed">Create your free profile as a student, employer, or campus partner and set your goals.</p>
       </div>
+
+      <!-- Step 2 -->
+      <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 hover:border-lime-400 transition group shadow-lg hover:shadow-lime-500/10">
+        <div class="text-lime-400 text-4xl mb-4">
+          <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2"
+               viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M21 21l-4.35-4.35M16.65 16.65a8 8 0 111.414-1.414L21 21z"></path>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-semibold mb-3 text-white group-hover:text-lime-400 transition">Step 2: Explore</h3>
+        <p class="text-lg text-gray-400 leading-relaxed">Browse job openings, internships, and top student profiles with intelligent filtering.</p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 hover:border-lime-400 transition group shadow-lg hover:shadow-lime-500/10">
+        <div class="text-lime-400 text-4xl mb-4">
+          <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2"
+               viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 10h.01M12 14h.01M16 10h.01M9 16h6a2 2 0 002-2V7a2 2 0 00-2-2H9a2 2 0 00-2 2v7a2 2 0 002 2z"></path>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-semibold mb-3 text-white group-hover:text-lime-400 transition">Step 3: Connect</h3>
+        <p class="text-lg text-gray-400 leading-relaxed">Apply instantly or hire top talent. TalentTrail makes the connection seamless.</p>
+      </div>
+
     </div>
-  </section>
+  </div>
+</section>
+
+
+  <!-- Call To Action -->
+ <section class="py-20 bg-gray-900 text-white text-center px-6">
+  <h2 class="text-4xl md:text-5xl font-bold mb-4">Ready to Take the Next Step?</h2>
+  <p class="text-xl text-gray-300 mb-8">Join TalentTrail and launch your journey with confidence.</p>
+  <a href="signup.html"
+     class="bg-lime-400 text-black px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-lime-300 transition duration-300">
+    Create Your Free Account
+  </a>
+</section>
+
 
   <!-- Footer -->
   <footer class="bg-black border-t border-gray-800 text-center py-6 text-gray-500 text-sm">
