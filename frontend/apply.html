@@ -12,7 +12,7 @@
   <!-- Navbar -->
   <nav class="flex items-center justify-between px-6 py-4 bg-black text-white shadow-md">
     <div class="flex items-center space-x-4">
-      <a href="index.html" class="flex items-center space-x-2">
+      <a href="mainpage.html" class="flex items-center space-x-2">
         <span class="bg-lime-400 text-black font-bold px-3 py-1 rounded text-2xl hover:scale-105 transition">TalentTrail</span>
       </a>
       <ul class="hidden md:flex space-x-6 font-medium text-white ml-6">
@@ -132,7 +132,7 @@
         submitBtn.disabled = true;
         submitBtn.textContent = 'Submitting...';
 
-        await applicationsAPI.submit(formData);  // This must support FormData in your API
+        await applicationsAPI.submit(formData);  // Ensure your `applicationsAPI.submit` supports FormData
 
         showMessage('Application submitted successfully!');
         applicationForm.reset();
