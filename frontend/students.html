@@ -79,39 +79,27 @@
     <div id="jobList" class="grid gap-8 md:grid-cols-2"></div>
   </main>
 
-  <!-- CTA Apply Button -->
-  <section class="text-center mt-20 mb-32 px-6">
-    <a href="apply.html" class="inline-block bg-lime-400 text-black px-10 py-4 rounded-full text-xl font-bold hover:bg-lime-300 transition">
-      Apply Now
-    </a>
-  </section>
-
   <!-- Footer -->
   <footer class="bg-black border-t border-gray-800 text-center py-6 text-gray-500 text-sm">
     © 2025 TalentTrail. All rights reserved.
   </footer>
 
   <!-- Scripts -->
+   <script src="api.js"></script>
   <script>
     // Load all jobs from localStorage
     //let jobs = JSON.parse(localStorage.getItem('talenttrailJobs')) || [];
 
     let jobs = [];
 
-  fetch('http://localhost:5000/api/jobs')
-    .then(res => res.json())
-    .then(response => {
-      if (response.success && Array.isArray(response.data.jobs)) {
-        jobs = response.data.jobs;
+    jobsAPI.getAll()
+      .then(response => {
+        jobs = response.data.jobs || [];
         renderJobs(jobs);
-      } else {
-        console.error('Unexpected job data format:', response);
-      }
-    })
-    .catch(err => {
-      console.error('Failed to fetch jobs:', err);
-    });
-
+      })
+      .catch(error => {
+        console.error("Failed to load jobs:", error);
+      });
 
     const jobList = document.getElementById('jobList');
 
