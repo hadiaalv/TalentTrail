@@ -9,31 +9,59 @@
 <body class="bg-black text-white font-sans">
 
   <!-- Navbar -->
-  <!-- ... your navbar code here ... -->
+  <nav class="flex items-center justify-between px-6 py-4 bg-black text-white shadow-md">
+    <div class="flex items-center space-x-6">
+      <a href="mainpage.html" class="flex items-center space-x-2">
+        <span class="bg-lime-400 text-black font-bold px-3 py-1 rounded text-2xl tracking-wide hover:scale-105 transition">TalentTrail</span>
+      </a>
+      <ul class="hidden md:flex space-x-8 font-semibold text-white ml-4">
+        <li><a href="about.html" class="hover:text-lime-400 transition">About</a></li>
+        <li><a href="students.html" class="hover:text-lime-400 transition">Students</a></li>
+        <li><a href="employers.html" class="hover:text-lime-400 transition">Employers</a></li>
+        <li><a href="company.html" class="hover:text-lime-400 transition">Company</a></li>
+        <li><a href="contact.html" class="text-lime-400 font-bold hover:text-lime-400 transition">Contact</a></li>
+      </ul>
+    </div>
+    <div class="flex items-center space-x-4">
+      <a href="signup.html" class="border border-white text-white px-4 py-1 rounded hover:border-lime-400 hover:text-lime-400 transition">Sign up</a>
+      <a href="login.html" class="bg-lime-400 text-black px-4 py-1 rounded hover:bg-lime-300 transition">Log in</a>
+    </div>
+  </nav>
 
+  <!-- Contact Section -->
   <section class="py-20 px-6 text-center">
     <h1 class="text-4xl font-bold mb-6 text-lime-400">Get in Touch</h1>
-    <p class="text-gray-400 max-w-xl mx-auto mb-10">We’re here to help! Reach out to us with your questions or feedback.</p>
+    <p class="text-gray-400 max-w-xl mx-auto mb-10">
+      We’re here to help! Reach out to us with your questions or feedback.
+    </p>
 
-    <form class="max-w-xl mx-auto bg-gray-900 p-8 rounded-xl text-left space-y-4">
+    <form action="#" method="POST" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-xl text-left space-y-4 shadow-lg hover:shadow-lime-400 transition">
       <div>
-        <label class="block text-sm mb-1">Name</label>
-        <input type="text" class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 text-white" />
+        <label class="block text-sm text-lime-400 mb-1">Name</label>
+        <input type="text" name="name" required placeholder="Your full name"
+          class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-lime-400">
       </div>
       <div>
-        <label class="block text-sm mb-1">Email</label>
-        <input type="email" class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 text-white" />
+        <label class="block text-sm text-lime-400 mb-1">Email</label>
+        <input type="email" name="email" required placeholder="Your email address"
+          class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-lime-400">
       </div>
       <div>
-        <label class="block text-sm mb-1">Message</label>
-        <textarea rows="4" class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 text-white"></textarea>
+        <label class="block text-sm text-lime-400 mb-1">Message</label>
+        <textarea name="message" rows="4" required placeholder="Write your message..."
+          class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-lime-400"></textarea>
       </div>
-      <button class="bg-lime-400 text-black px-6 py-2 rounded hover:bg-lime-500">Send Message</button>
+      <button type="submit"
+        class="bg-lime-400 text-black px-6 py-2 rounded font-semibold hover:bg-lime-300 transition">
+        Send Message
+      </button>
     </form>
   </section>
 
   <!-- Footer -->
-  <!-- ... your footer code here ... -->
+  <footer class="bg-black border-t border-gray-800 text-center py-6 text-gray-500 text-sm">
+    © 2025 TalentTrail. All rights reserved.
+  </footer>
 
 </body>
 </html>

@@ -12,10 +12,13 @@
   <!-- Navbar -->
   <nav class="flex items-center justify-between px-6 py-4 bg-black text-white shadow-lg z-10">
     <div class="flex items-center space-x-4">
-      <a href="mainpage.html">
+      <!-- ✅ TalentTrail Logo + Link -->
+      <a href="mainpage.html" class="flex items-center space-x-2">
+        <span class="bg-lime-400 text-black font-bold px-3 py-1 rounded text-2xl hover:scale-105 transition">
+          TalentTrail
+        </span>
       </a>
-      <a href="mainpage.html" class="bg-lime-400 text-black font-bold px-3 py-1 rounded text-2xl hover:scale-105 transition">TalentTrail</a>
-      <ul class="hidden md:flex space-x-6 font-medium text-white">
+      <ul class="hidden md:flex space-x-6 font-medium text-white ml-4">
         <li><a href="about.html" class="hover:text-lime-400 transition">About</a></li>
         <li><a href="students.html" class="hover:text-lime-400 transition">Students</a></li>
         <li><a href="employers.html" class="hover:text-lime-400 transition">Employers</a></li>
@@ -59,10 +62,13 @@
     </div>
   </section>
 
+  <!-- Slider Script -->
   <script>
     $(document).ready(function () {
-      let slides = $("#slider .slide");
+      const slides = $("#slider .slide");
       let index = 0;
+
+      slides.hide().eq(index).show(); // Show first slide initially
 
       function showNextSlide() {
         slides.eq(index).fadeOut(500, function () {
