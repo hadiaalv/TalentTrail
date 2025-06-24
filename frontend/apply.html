@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="logo.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <title>Apply Now - TalentTrail</title>
 </head>
@@ -11,7 +12,7 @@
   <!-- Navbar -->
   <nav class="flex items-center justify-between px-6 py-4 bg-black text-white shadow-md">
     <div class="flex items-center space-x-4">
-      <a href="index.html" class="flex items-center space-x-2">
+      <a href="mainpage.html" class="flex items-center space-x-2">
         <span class="bg-lime-400 text-black font-bold px-3 py-1 rounded text-2xl hover:scale-105 transition">TalentTrail</span>
       </a>
       <ul class="hidden md:flex space-x-6 font-medium text-white ml-6">
@@ -37,11 +38,12 @@
 
   <!-- Application Form -->
   <section class="max-w-3xl mx-auto px-6 mb-24">
-    <form action="#" method="POST" onsubmit="return handleSubmit()" class="bg-gray-900 p-8 rounded-2xl shadow-lg hover:shadow-lime-400 transition">
+    <form id="applicationForm" method="POST" enctype="multipart/form-data"
+      class="bg-gray-900 p-8 rounded-2xl shadow-lg hover:shadow-lime-400 transition">
 
       <div class="mb-6">
         <label class="block mb-2 text-lime-400 font-semibold">Full Name</label>
-        <input type="text" name="name" required placeholder="Enter your full name"
+        <input type="text" name="fullName" required placeholder="Enter your full name"
           class="w-full p-3 rounded bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-lime-400 outline-none">
       </div>
 
@@ -57,16 +59,26 @@
           class="w-full p-3 rounded bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-lime-400 outline-none">
       </div>
 
-      <div class="mb-8">
+      <div class="mb-6">
         <label class="block mb-2 text-lime-400 font-semibold">Cover Letter / Why You’re a Fit</label>
-        <textarea name="message" rows="5" required placeholder="Briefly explain why you're suitable..."
+        <textarea name="coverLetter" rows="5" required placeholder="Briefly explain why you're suitable..."
           class="w-full p-3 rounded bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-lime-400 outline-none"></textarea>
       </div>
 
-      <button type="submit"
+      <div class="mb-8">
+        <label class="block mb-2 text-lime-400 font-semibold">Upload Resume (PDF, DOC, DOCX)</label>
+        <input type="file" name="resume" accept=".pdf,.doc,.docx" required
+          class="w-full p-2 bg-gray-800 text-white border border-gray-700 rounded file:bg-lime-400 file:text-black file:font-bold file:border-none file:px-4 file:py-2 hover:file:bg-lime-300 transition">
+      </div>
+
+      <input type="hidden" name="jobId" id="jobId" />
+
+      <button type="submit" id="submitBtn"
         class="w-full bg-lime-400 text-black py-3 rounded font-bold text-lg hover:bg-lime-300 transition">
         Submit Application
       </button>
+
+      <div id="messageBox" class="hidden mt-4 text-center font-semibold"></div>
     </form>
   </section>
 
@@ -85,16 +97,13 @@
       messageBox.textContent = message;
       messageBox.className = `mt-4 text-center font-semibold ${isError ? 'text-red-500' : 'text-lime-400'}`;
       messageBox.classList.remove('hidden');
-      
       setTimeout(() => {
         messageBox.classList.add('hidden');
       }, 5000);
     }
 
-    // Get job ID from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const jobId = urlParams.get('jobId');
-    
     if (jobId) {
       document.getElementById('jobId').value = jobId;
     }
@@ -117,28 +126,17 @@
       }
 
       const formData = new FormData(applicationForm);
-      const applicationData = {
-        jobId: formData.get('jobId') || jobId,
-        fullName: formData.get('fullName').trim(),
-        email: formData.get('email').trim(),
-        position: formData.get('position').trim(),
-        coverLetter: formData.get('coverLetter').trim()
-      };
-
-      if (!applicationData.jobId) {
-        showMessage('Job ID is required. Please apply from a specific job listing.', true);
-        return;
-      }
+      formData.append('jobId', formData.get('jobId') || jobId);
 
       try {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Submitting...';
 
-        await applicationsAPI.submit(applicationData);
-        
+        await applicationsAPI.submit(formData);  // Ensure your `applicationsAPI.submit` supports FormData
+
         showMessage('Application submitted successfully!');
         applicationForm.reset();
-        
+
         setTimeout(() => {
           window.location.href = 'students.html';
         }, 2000);
@@ -151,6 +149,5 @@
       }
     });
   </script>
-
 </body>
 </html>
