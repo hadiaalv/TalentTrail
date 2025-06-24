@@ -6,24 +6,55 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <title>Log In | TalentTrail</title>
 </head>
-<body class="bg-black text-white flex items-center justify-center min-h-screen px-4">
+<body class="bg-black text-white font-sans">
 
-  <div class="w-full max-w-md bg-gray-900 p-8 rounded-2xl shadow-lg hover:shadow-lime-400 transition duration-300">
-    <h2 class="text-3xl font-bold text-lime-400 text-center mb-6">Log In</h2>
-    
-    <form action="#" method="POST" class="space-y-5">
-      <input type="email" placeholder="Email Address" class="w-full px-4 py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-400 transition" required>
+  <!-- Navbar -->
+  <nav class="flex items-center justify-between px-6 py-4 bg-black text-white shadow-md">
+    <div class="flex items-center space-x-6">
+      <a href="mainpage.html" class="flex items-center space-x-2">
+        <span class="bg-lime-400 text-black font-bold px-3 py-1 rounded text-2xl tracking-wide hover:scale-105 transition">TalentTrail</span>
+      </a>
+      <ul class="hidden md:flex space-x-8 font-semibold text-white ml-4">
+        <li><a href="about.html" class="hover:text-lime-400 transition">About</a></li>
+        <li><a href="students.html" class="hover:text-lime-400 transition">Students</a></li>
+        <li><a href="employers.html" class="hover:text-lime-400 transition">Employers</a></li>
+        <li><a href="company.html" class="hover:text-lime-400 transition">Company</a></li>
+        <li><a href="contact.html" class="hover:text-lime-400 transition">Contact</a></li>
+      </ul>
+    </div>
+    <div class="flex items-center space-x-4">
+      <a href="signup.html" class="border border-white text-white px-5 py-2 rounded-lg hover:border-lime-400 hover:text-lime-400 transition">Sign up</a>
+      <a href="login.html" class="bg-lime-400 text-black px-5 py-2 rounded-lg hover:bg-lime-300 transition font-bold">Log in</a>
+    </div>
+  </nav>
 
-      <input type="password" placeholder="Password" class="w-full px-4 py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-400 transition" required>
+  <!-- Log In Form Section -->
+  <main class="flex items-center justify-center min-h-[calc(100vh-100px)] px-4">
+    <div class="w-full max-w-md bg-gray-900 p-8 rounded-2xl shadow-lg hover:shadow-lime-400 transition duration-300">
+      <h2 class="text-3xl font-bold text-lime-400 text-center mb-6">Log In</h2>
+      
+      <form action="#" method="POST" class="space-y-5">
+        <input type="email" placeholder="Email Address" required
+          class="w-full px-4 py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-400 transition">
 
-      <button type="submit" class="w-full bg-lime-400 text-black py-3 rounded font-semibold hover:bg-lime-500 transition">Log In</button>
-    </form>
+        <input type="password" placeholder="Password" required
+          class="w-full px-4 py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-400 transition">
 
-    <p class="text-sm text-center text-gray-400 mt-6">
-      Don't have an account? 
-      <a href="signup.html" class="text-lime-400 hover:underline">Sign up now</a>
-    </p>
-  </div>
+        <button type="submit"
+          class="w-full bg-lime-400 text-black py-3 rounded font-semibold hover:bg-lime-500 transition">Log In</button>
+      </form>
+
+      <p class="text-sm text-center text-gray-400 mt-6">
+        Don't have an account? 
+        <a href="signup.html" class="text-lime-400 hover:underline">Sign up now</a>
+      </p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-black border-t border-gray-800 text-center py-6 text-gray-500 text-sm mt-10">
+    © 2025 TalentTrail. All rights reserved.
+  </footer>
 
 </body>
 </html>

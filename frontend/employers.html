@@ -11,11 +11,13 @@
   <!-- Navbar -->
   <nav class="flex items-center justify-between px-6 py-4 bg-black text-white shadow-md">
     <div class="flex items-center space-x-6">
-      <a href="index.html" class="bg-lime-400 text-black font-bold px-3 py-1 rounded text-2xl tracking-wide">TalentTrail</a>
-      <ul class="hidden md:flex space-x-8 font-semibold text-white">
+      <a href="mainpage.html" class="flex items-center space-x-2">
+        <span class="bg-lime-400 text-black font-bold px-3 py-1 rounded text-2xl tracking-wide hover:scale-105 transition">TalentTrail</span>
+      </a>
+      <ul class="hidden md:flex space-x-8 font-semibold text-white ml-4">
         <li><a href="about.html" class="hover:text-lime-400 transition">About</a></li>
         <li><a href="students.html" class="hover:text-lime-400 transition">Students</a></li>
-        <li><a href="employers.html" class="hover:text-lime-400 transition text-lime-400 font-bold">Employers</a></li>
+        <li><a href="employers.html" class="text-lime-400 font-bold hover:text-lime-400 transition">Employers</a></li>
         <li><a href="company.html" class="hover:text-lime-400 transition">Company</a></li>
         <li><a href="contact.html" class="hover:text-lime-400 transition">Contact</a></li>
       </ul>
@@ -49,6 +51,7 @@
     © 2025 TalentTrail. All rights reserved.
   </footer>
 
+  <!-- Form Alert Script -->
   <script>
     document.getElementById('jobPostForm').addEventListener('submit', function(e) {
       e.preventDefault();
