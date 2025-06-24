@@ -35,49 +35,47 @@
     </p>
   </section>
 
-  <!-- Features Grid -->
-  <section class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10">
-    <div class="bg-gray-900 rounded-2xl p-8 shadow-lg hover:bg-gray-800 transition transform hover:scale-105 cursor-default flex flex-col">
-      <div class="mb-4 text-lime-400">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18M12 3v18" />
-        </svg>
-      </div>
-      <h2 class="text-2xl font-semibold text-lime-400 mb-3 text-center">Personalized Dashboard</h2>
-      <p class="text-gray-400 text-center text-lg">Track applications, saved jobs, and interview feedback easily in one place, customized for your career path.</p>
-    </div>
+  <!-- Search and Filters -->
+  <section class="max-w-5xl mx-auto px-6 mb-12 flex flex-col md:flex-row gap-4 justify-center items-center">
+    <input
+      type="text"
+      id="jobSearchInput"
+      aria-label="Search jobs"
+      placeholder="Search jobs, companies, or locations..."
+      class="rounded-lg p-3 bg-gray-800 border border-gray-700 text-white w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-lime-400 transition"
+      oninput="filterJobs()"
+    />
 
-    <div class="bg-gray-900 rounded-2xl p-8 shadow-lg hover:bg-gray-800 transition transform hover:scale-105 cursor-default flex flex-col">
-      <div class="mb-4 text-lime-400">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 20c4.418 0 8-3.582 8-8a8 8 0 00-16 0c0 1.457.457 2.8 1.22 3.907" />
-        </svg>
-      </div>
-      <h2 class="text-2xl font-semibold text-lime-400 mb-3 text-center">Smart Job Matches</h2>
-      <p class="text-gray-400 text-center text-lg">Get matched with roles that fit your skills, preferences, and schedule for a perfect career fit.</p>
-    </div>
+    <select
+      id="filterType"
+      aria-label="Filter by Job Type"
+      class="rounded-lg p-3 bg-gray-800 border border-gray-700 text-white w-full md:w-1/4 focus:outline-none focus:ring-2 focus:ring-lime-400 transition"
+      onchange="filterJobs()"
+    >
+      <option value="">All Types</option>
+      <option value="Internship">Internship</option>
+      <option value="Full-time">Full-time</option>
+      <option value="Part-time">Part-time</option>
+    </select>
+
+    <select
+      id="filterLocation"
+      aria-label="Filter by Location"
+      class="rounded-lg p-3 bg-gray-800 border border-gray-700 text-white w-full md:w-1/4 focus:outline-none focus:ring-2 focus:ring-lime-400 transition"
+      onchange="filterJobs()"
+    >
+      <option value="">All Locations</option>
+      <option value="Remote">Remote</option>
+      <option value="On-site">On-site</option>
+      <option value="Hybrid">Hybrid</option>
+    </select>
   </section>
 
   <!-- Job Listings Section -->
-  <section class="max-w-5xl mx-auto mt-24 px-6">
-    <h2 class="text-4xl font-extrabold text-lime-400 text-center mb-12">Available Opportunities</h2>
-    <div class="grid gap-8 md:grid-cols-2">
-      <div class="bg-gray-900 rounded-xl p-6 hover:bg-gray-800 transition shadow-lg">
-        <h3 class="text-2xl font-bold mb-2">Frontend Developer Intern</h3>
-        <p class="text-gray-400 mb-3">Company: TechNova | Location: Remote</p>
-        <p class="text-gray-400 mb-6">Work on real-world UI projects using React and Tailwind CSS.</p>
-        <a href="apply.html" class="bg-lime-400 text-black px-4 py-2 rounded font-semibold hover:bg-lime-300 inline-block">Apply Now</a>
-      </div>
-
-      <div class="bg-gray-900 rounded-xl p-6 hover:bg-gray-800 transition shadow-lg">
-        <h3 class="text-2xl font-bold mb-2">Data Analyst Internship</h3>
-        <p class="text-gray-400 mb-3">Company: DataVerse | Location: On-site</p>
-        <p class="text-gray-400 mb-6">Assist in analyzing large datasets and building reports with Python.</p>
-        <a href="apply.html" class="bg-lime-400 text-black px-4 py-2 rounded font-semibold hover:bg-lime-300 inline-block">Apply Now</a>
-      </div>
-    </div>
-  </section>
+  <main class="max-w-5xl mx-auto mt-8 px-6" role="main" aria-labelledby="jobs-heading">
+    <h2 id="jobs-heading" class="text-4xl font-extrabold text-lime-400 text-center mb-12">Available Opportunities</h2>
+    <div id="jobList" class="grid gap-8 md:grid-cols-2"></div>
+  </main>
 
   <!-- CTA Apply Button -->
   <section class="text-center mt-20 mb-32 px-6">
@@ -90,6 +88,108 @@
   <footer class="bg-black border-t border-gray-800 text-center py-6 text-gray-500 text-sm">
     © 2025 TalentTrail. All rights reserved.
   </footer>
+
+  <!-- Scripts -->
+  <script>
+    const jobs = [
+      {
+        title: "Frontend Developer Intern",
+        company: "TechNova",
+        location: "Remote",
+        locationType: "Remote",
+        type: "Internship",
+        description: "Work on real-world UI projects using React and Tailwind CSS.",
+        applyLink: "apply.html"
+      },
+      {
+        title: "Data Analyst Internship",
+        company: "DataVerse",
+        location: "On-site",
+        locationType: "On-site",
+        type: "Internship",
+        description: "Assist in analyzing large datasets and building reports with Python.",
+        applyLink: "apply.html"
+      },
+      {
+        title: "Marketing Intern",
+        company: "BrightBuzz",
+        location: "Remote",
+        locationType: "Remote",
+        type: "Internship",
+        description: "Support marketing campaigns and social media strategies.",
+        applyLink: "apply.html"
+      },
+      {
+        title: "Software Engineer Trainee",
+        company: "CodeCraft",
+        location: "Hybrid",
+        locationType: "Hybrid",
+        type: "Full-time",
+        description: "Learn and contribute to software development projects.",
+        applyLink: "apply.html"
+      }
+    ];
+
+    const jobList = document.getElementById('jobList');
+
+    function toggleSave(button, jobTitle) {
+      const saved = button.classList.toggle('bg-lime-600');
+      button.textContent = saved ? "Saved" : "Save";
+      alert(saved ? `Saved job: ${jobTitle}` : `Removed saved job: ${jobTitle}`);
+    }
+
+    function renderJobs(filteredJobs) {
+      jobList.innerHTML = '';
+      if(filteredJobs.length === 0){
+        jobList.innerHTML = `<p class="text-gray-500 text-center col-span-full">No jobs found matching your search.</p>`;
+        return;
+      }
+      filteredJobs.forEach(job => {
+        const jobCard = document.createElement('div');
+        jobCard.className = 'bg-gray-900 rounded-xl p-6 hover:bg-gray-800 transition shadow-lg flex flex-col justify-between';
+
+        jobCard.innerHTML = `
+          <div>
+            <h3 class="text-2xl font-bold mb-2">${job.title}</h3>
+            <p class="text-gray-400 mb-1"><strong>Company:</strong> ${job.company}</p>
+            <p class="text-gray-400 mb-1"><strong>Location:</strong> ${job.location}</p>
+            <p class="text-gray-400 mb-1"><strong>Type:</strong> ${job.type}</p>
+            <p class="text-gray-400 mb-6">${job.description}</p>
+          </div>
+          <div class="flex space-x-4">
+            <a href="${job.applyLink}" class="bg-lime-400 text-black px-4 py-2 rounded font-semibold hover:bg-lime-300 transition flex-1 text-center" aria-label="Apply for ${job.title}">Apply Now</a>
+            <button aria-label="Save job ${job.title}" class="saveJobBtn bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded font-semibold transition flex-1">Save</button>
+          </div>
+        `;
+
+        jobList.appendChild(jobCard);
+
+        const saveBtn = jobCard.querySelector('.saveJobBtn');
+        saveBtn.onclick = () => toggleSave(saveBtn, job.title);
+      });
+    }
+
+    function filterJobs() {
+      const query = document.getElementById('jobSearchInput').value.toLowerCase();
+      const typeFilter = document.getElementById('filterType').value;
+      const locationFilter = document.getElementById('filterLocation').value;
+
+      const filtered = jobs.filter(job => {
+        const matchesText = job.title.toLowerCase().includes(query) ||
+                            job.company.toLowerCase().includes(query) ||
+                            job.location.toLowerCase().includes(query);
+
+        const matchesType = typeFilter === "" || job.type === typeFilter;
+        const matchesLocation = locationFilter === "" || job.locationType === locationFilter;
+
+        return matchesText && matchesType && matchesLocation;
+      });
+      renderJobs(filtered);
+    }
+
+    // Initial render of all jobs on page load
+    renderJobs(jobs);
+  </script>
 
 </body>
 </html>
