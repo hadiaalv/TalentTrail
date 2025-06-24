@@ -75,12 +75,81 @@
     © 2025 TalentTrail. All rights reserved.
   </footer>
 
-  <!-- Optional JavaScript -->
+  <script src="js/api.js"></script>
   <script>
-    function handleSubmit() {
-      alert("Your application has been submitted successfully!");
-      return true; // Change to false to prevent default submission for testing
+    const applicationForm = document.getElementById('applicationForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const messageBox = document.getElementById('messageBox');
+
+    function showMessage(message, isError = false) {
+      messageBox.textContent = message;
+      messageBox.className = `mt-4 text-center font-semibold ${isError ? 'text-red-500' : 'text-lime-400'}`;
+      messageBox.classList.remove('hidden');
+      
+      setTimeout(() => {
+        messageBox.classList.add('hidden');
+      }, 5000);
     }
+
+    // Get job ID from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const jobId = urlParams.get('jobId');
+    
+    if (jobId) {
+      document.getElementById('jobId').value = jobId;
+    }
+
+    applicationForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!applicationForm.checkValidity()) {
+        applicationForm.reportValidity();
+        return;
+      }
+
+      const { authenticated } = checkAuth();
+      if (!authenticated) {
+        showMessage('Please log in to submit an application.', true);
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 2000);
+        return;
+      }
+
+      const formData = new FormData(applicationForm);
+      const applicationData = {
+        jobId: formData.get('jobId') || jobId,
+        fullName: formData.get('fullName').trim(),
+        email: formData.get('email').trim(),
+        position: formData.get('position').trim(),
+        coverLetter: formData.get('coverLetter').trim()
+      };
+
+      if (!applicationData.jobId) {
+        showMessage('Job ID is required. Please apply from a specific job listing.', true);
+        return;
+      }
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+
+        await applicationsAPI.submit(applicationData);
+        
+        showMessage('Application submitted successfully!');
+        applicationForm.reset();
+        
+        setTimeout(() => {
+          window.location.href = 'students.html';
+        }, 2000);
+
+      } catch (error) {
+        showMessage(error.message || 'Failed to submit application. Please try again.', true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Application';
+      }
+    });
   </script>
 
 </body>

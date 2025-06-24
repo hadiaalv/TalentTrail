@@ -9,31 +9,235 @@
 <body class="bg-black text-white font-sans">
 
   <!-- Navbar -->
-  <!-- ... your navbar code here ... -->
+  <nav class="flex items-center justify-between px-6 py-4 bg-black text-white shadow-md">
+    <div class="flex items-center space-x-6">
+      <a href="mainpage.html" class="flex items-center space-x-2">
+        <span class="bg-lime-400 text-black font-bold px-3 py-1 rounded text-2xl tracking-wide hover:scale-105 transition">TalentTrail</span>
+      </a>
+      <ul class="hidden md:flex space-x-8 font-semibold text-white ml-4">
+        <li><a href="about.html" class="hover:text-lime-400 transition">About</a></li>
+        <li><a href="students.html" class="hover:text-lime-400 transition">Students</a></li>
+        <li><a href="employers.html" class="hover:text-lime-400 transition">Employers</a></li>
+        <li><a href="contact.html" class="hover:text-lime-400 transition">Contact</a></li>
+      </ul>
+    </div>
+    <div class="flex items-center space-x-4">
+      <a href="signup.html" class="border border-white text-white px-5 py-2 rounded-lg hover:border-lime-400 hover:text-lime-400 transition">Sign up</a>
+      <a href="login.html" class="bg-lime-400 text-black px-5 py-2 rounded-lg hover:bg-lime-300 transition">Log in</a>
+    </div>
+  </nav>
 
+  <!-- Hero Section -->
   <section class="py-20 px-6 text-center">
-    <h1 class="text-4xl font-bold mb-6 text-lime-400">Explore Internships</h1>
-    <p class="text-gray-400 max-w-xl mx-auto mb-10">
-      Browse a wide range of internships across industries. Build your resume and gain experience.
+    <h1 class="text-4xl md:text-5xl font-bold mb-6 text-lime-400">Explore Internships</h1>
+    <p class="text-gray-400 max-w-2xl mx-auto mb-10 text-lg">
+      Browse a wide range of internships across industries. Build your resume and gain experience with top companies.
     </p>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto text-left">
-      <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800">
-        <h3 class="text-xl font-semibold text-lime-400">Software Engineering</h3>
-        <p class="text-gray-400">Work with tech companies on real-world projects and tools.</p>
+  </section>
+
+  <!-- Search and Filters -->
+  <section class="max-w-4xl mx-auto px-6 mb-12 flex flex-col md:flex-row gap-4 justify-center items-center">
+    <input
+      type="text"
+      id="internshipSearchInput"
+      aria-label="Search internships"
+      placeholder="Search internships, companies, or locations..."
+      class="rounded-lg p-3 bg-gray-800 border border-gray-700 text-white w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-lime-400 transition"
+      oninput="filterInternships()"
+    />
+
+    <select
+      id="filterLocation"
+      aria-label="Filter by Location"
+      class="rounded-lg p-3 bg-gray-800 border border-gray-700 text-white w-full md:w-1/4 focus:outline-none focus:ring-2 focus:ring-lime-400 transition"
+      onchange="filterInternships()"
+    >
+      <option value="">All Locations</option>
+      <option value="Remote">Remote</option>
+      <option value="On-site">On-site</option>
+      <option value="Hybrid">Hybrid</option>
+    </select>
+  </section>
+
+  <!-- Internship Categories -->
+  <section class="max-w-6xl mx-auto px-6 mb-16">
+    <h2 class="text-3xl font-bold text-lime-400 text-center mb-12">Popular Internship Categories</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+      <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800 transition transform hover:scale-105">
+        <h3 class="text-xl font-semibold text-lime-400 mb-3">Software Engineering</h3>
+        <p class="text-gray-400 mb-4">Work with tech companies on real-world projects and cutting-edge tools. Gain hands-on experience in web development, mobile apps, and system design.</p>
+        <button onclick="filterByCategory('Software')" class="text-lime-400 hover:underline">View Opportunities →</button>
       </div>
-      <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800">
-        <h3 class="text-xl font-semibold text-lime-400">Marketing</h3>
-        <p class="text-gray-400">Get hands-on experience with campaigns, SEO, and brand strategy.</p>
+      <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800 transition transform hover:scale-105">
+        <h3 class="text-xl font-semibold text-lime-400 mb-3">Marketing & Communications</h3>
+        <p class="text-gray-400 mb-4">Get hands-on experience with campaigns, SEO, social media strategy, and brand development with leading marketing agencies.</p>
+        <button onclick="filterByCategory('Marketing')" class="text-lime-400 hover:underline">View Opportunities →</button>
       </div>
-      <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800">
-        <h3 class="text-xl font-semibold text-lime-400">Finance</h3>
-        <p class="text-gray-400">Intern with leading firms in analysis, accounting, and more.</p>
+      <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800 transition transform hover:scale-105">
+        <h3 class="text-xl font-semibold text-lime-400 mb-3">Finance & Banking</h3>
+        <p class="text-gray-400 mb-4">Intern with leading financial firms in analysis, accounting, investment banking, and fintech innovation.</p>
+        <button onclick="filterByCategory('Finance')" class="text-lime-400 hover:underline">View Opportunities →</button>
+      </div>
+      <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800 transition transform hover:scale-105">
+        <h3 class="text-xl font-semibold text-lime-400 mb-3">Data Science & Analytics</h3>
+        <p class="text-gray-400 mb-4">Work with big data, machine learning, and business intelligence tools to drive data-driven decisions.</p>
+        <button onclick="filterByCategory('Data')" class="text-lime-400 hover:underline">View Opportunities →</button>
+      </div>
+      <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800 transition transform hover:scale-105">
+        <h3 class="text-xl font-semibold text-lime-400 mb-3">Design & Creative</h3>
+        <p class="text-gray-400 mb-4">Explore UX/UI design, graphic design, and creative strategy roles with innovative design studios and tech companies.</p>
+        <button onclick="filterByCategory('Design')" class="text-lime-400 hover:underline">View Opportunities →</button>
+      </div>
+      <div class="bg-gray-900 p-6 rounded-xl hover:bg-gray-800 transition transform hover:scale-105">
+        <h3 class="text-xl font-semibold text-lime-400 mb-3">Business & Consulting</h3>
+        <p class="text-gray-400 mb-4">Gain experience in strategy consulting, business development, and operations with top consulting firms.</p>
+        <button onclick="filterByCategory('Business')" class="text-lime-400 hover:underline">View Opportunities →</button>
       </div>
     </div>
   </section>
 
+  <!-- Internship Listings -->
+  <section class="max-w-5xl mx-auto px-6 mb-20">
+    <h2 class="text-3xl font-bold text-lime-400 text-center mb-12">Available Internships</h2>
+    <div id="internshipList" class="grid gap-6 md:grid-cols-2"></div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="text-center mb-20 px-6">
+    <h2 class="text-3xl font-bold text-lime-400 mb-4">Ready to Start Your Career Journey?</h2>
+    <p class="text-gray-400 mb-8 max-w-2xl mx-auto">
+      Join thousands of students who have found their dream internships through TalentTrail. Start building your professional network today.
+    </p>
+    <a href="signup.html" class="inline-block bg-lime-400 text-black px-10 py-4 rounded-full text-xl font-bold hover:bg-lime-300 transition">
+      Get Started Now
+    </a>
+  </section>
+
   <!-- Footer -->
-  <!-- ... your footer code here ... -->
+  <footer class="bg-black border-t border-gray-800 text-center py-6 text-gray-500 text-sm">
+    © 2025 TalentTrail. All rights reserved.
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    let internships = [];
+    let allInternships = [];
+
+    const internshipList = document.getElementById('internshipList');
+
+    // Load internships (filter for internship type jobs)
+    async function loadInternships() {
+      try {
+        const response = await jobsAPI.getAll({ jobType: 'Internship' });
+        allInternships = response.data.jobs;
+        internships = [...allInternships];
+        renderInternships(internships);
+      } catch (error) {
+        console.error('Failed to fetch internships:', error);
+        internshipList.innerHTML = '<p class="text-red-500 text-center col-span-full">Failed to load internships. Please try again later.</p>';
+      }
+    }
+
+    function renderInternships(filteredInternships) {
+      internshipList.innerHTML = '';
+      
+      if(filteredInternships.length === 0){
+        internshipList.innerHTML = `<p class="text-gray-500 text-center col-span-full">No internships found matching your search.</p>`;
+        return;
+      }
+      
+      filteredInternships.forEach(internship => {
+        const internshipCard = document.createElement('div');
+        internshipCard.className = 'bg-gray-900 rounded-xl p-6 hover:bg-gray-800 transition shadow-lg flex flex-col justify-between';
+
+        const deadline = new Date(internship.deadline);
+        const isExpired = deadline < new Date();
+
+        internshipCard.innerHTML = `
+          <div>
+            <h3 class="text-xl font-bold mb-2 text-lime-400">${internship.title}</h3>
+            <p class="text-gray-400 mb-1"><strong>Company:</strong> ${internship.company}</p>
+            <p class="text-gray-400 mb-1"><strong>Location:</strong> ${internship.location}</p>
+            ${internship.salary ? `<p class="text-gray-400 mb-1"><strong>Stipend:</strong> $${internship.salary}</p>` : ''}
+            <p class="text-gray-400 mb-1"><strong>Deadline:</strong> ${deadline.toLocaleDateString()}</p>
+            <p class="text-gray-400 mb-4">${internship.description.substring(0, 120)}${internship.description.length > 120 ? '...' : ''}</p>
+            ${isExpired ? '<p class="text-red-500 font-semibold mb-4">Application deadline has passed</p>' : ''}
+          </div>
+          <div class="flex space-x-4">
+            ${!isExpired ? `<button onclick="applyForInternship('${internship._id}', '${internship.title}')" class="bg-lime-400 text-black px-4 py-2 rounded font-semibold hover:bg-lime-300 transition flex-1">Apply Now</button>` : '<button disabled class="bg-gray-600 text-gray-400 px-4 py-2 rounded font-semibold flex-1 cursor-not-allowed">Expired</button>'}
+            <button onclick="saveInternship(this, '${internship.title}')" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded font-semibold transition flex-1">Save</button>
+          </div>
+        `;
+
+        internshipList.appendChild(internshipCard);
+      });
+    }
+
+    function applyForInternship(internshipId, internshipTitle) {
+      const { authenticated, user } = checkAuth();
+      
+      if (!authenticated) {
+        alert('Please log in to apply for internships.');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      if (user.role !== 'student') {
+        alert('Only students can apply for internships.');
+        return;
+      }
+
+      window.location.href = `apply.html?jobId=${internshipId}`;
+    }
+
+    function saveInternship(button, internshipTitle) {
+      const saved = button.classList.toggle('bg-lime-600');
+      button.textContent = saved ? "Saved" : "Save";
+      
+      const message = saved ? `Saved internship: ${internshipTitle}` : `Removed saved internship: ${internshipTitle}`;
+      
+      // Show temporary message
+      const tempMsg = document.createElement('div');
+      tempMsg.className = 'fixed top-4 right-4 bg-lime-400 text-black px-4 py-2 rounded shadow-lg z-50';
+      tempMsg.textContent = message;
+      document.body.appendChild(tempMsg);
+      
+      setTimeout(() => {
+        document.body.removeChild(tempMsg);
+      }, 2000);
+    }
+
+    function filterInternships() {
+      const query = document.getElementById('internshipSearchInput').value.toLowerCase();
+      const locationFilter = document.getElementById('filterLocation').value;
+
+      const filtered = allInternships.filter(internship => {
+        const matchesText = internship.title.toLowerCase().includes(query) ||
+                            internship.company.toLowerCase().includes(query) ||
+                            internship.location.toLowerCase().includes(query) ||
+                            internship.description.toLowerCase().includes(query);
+
+        const matchesLocation = locationFilter === "" || 
+                               internship.location.toLowerCase().includes(locationFilter.toLowerCase());
+
+        return matchesText && matchesLocation;
+      });
+      
+      renderInternships(filtered);
+    }
+
+    function filterByCategory(category) {
+      const searchInput = document.getElementById('internshipSearchInput');
+      searchInput.value = category;
+      filterInternships();
+      
+      // Scroll to internship listings
+      document.getElementById('internshipList').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Initialize page
+    loadInternships();
+  </script>
 
 </body>
 </html>

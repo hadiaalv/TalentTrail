@@ -93,7 +93,19 @@
   <!-- Scripts -->
   <script>
     // Load all jobs from localStorage
-    let jobs = JSON.parse(localStorage.getItem('talenttrailJobs')) || [];
+    //let jobs = JSON.parse(localStorage.getItem('talenttrailJobs')) || [];
+
+    let jobs = [];
+
+  fetch('http://localhost:5000/api/jobs')
+    .then(res => res.json())
+    .then(data => {
+      jobs = data;
+      renderJobs(jobs);
+    })
+    .catch(err => {
+      console.error('Failed to fetch jobs:', err);
+    });
 
     const jobList = document.getElementById('jobList');
 

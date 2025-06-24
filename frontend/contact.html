@@ -64,25 +64,57 @@
     © 2025 TalentTrail. All rights reserved.
   </footer>
 
-  <!-- JavaScript -->
+  <script src="js/api.js"></script>
   <script>
-    const form = document.getElementById("contactForm");
-    const emailInput = document.getElementById("email");
-    const emailError = document.getElementById("emailError");
+    const contactForm = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const messageBox = document.getElementById('messageBox');
 
-    form.addEventListener("submit", function (e) {
-      if (!emailInput.validity.valid) {
-        emailError.classList.remove("hidden");
-        e.preventDefault(); // prevent form submission
-      } else {
-        emailError.classList.add("hidden");
-        alert("Your message has been sent successfully!");
-        form.reset();
+    function showMessage(message, isError = false) {
+      messageBox.textContent = message;
+      messageBox.className = `mt-4 text-center font-semibold ${isError ? 'text-red-500' : 'text-lime-400'}`;
+      messageBox.classList.remove('hidden');
+      
+      setTimeout(() => {
+        messageBox.classList.add('hidden');
+      }, 5000);
+    }
+
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(contactForm);
+      const contactData = {
+        name: formData.get('name').trim(),
+        email: formData.get('email').trim(),
+        message: formData.get('message').trim()
+      };
+
+      // Basic validation
+      if (!contactData.name || !contactData.email || !contactData.message) {
+        showMessage('Please fill in all fields.', true);
+        return;
       }
-    });
 
-    emailInput.addEventListener("input", () => {
-      emailError.classList.add("hidden");
+      if (contactData.message.length < 10) {
+        showMessage('Message must be at least 10 characters long.', true);
+        return;
+      }
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+
+        const response = await contactAPI.submit(contactData);
+        
+        showMessage(response.message);
+        contactForm.reset();
+      } catch (error) {
+        showMessage(error.message || 'Failed to send message. Please try again.', true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+      }
     });
   </script>
 
