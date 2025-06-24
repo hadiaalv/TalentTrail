@@ -10,11 +10,12 @@ const getAuthToken = () => {
 // API request helper
 const apiRequest = async (endpoint, options = {}) => {
   const token = getAuthToken();
-  
+  const isFormData = options.body instanceof FormData;
+
   const config = {
     headers: {
-      'Content-Type': 'application/json',
       ...(token && { Authorization: `Bearer ${token}` }),
+      ...(!isFormData && { 'Content-Type': 'application/json' }),  // Only add JSON header if not FormData
       ...options.headers
     },
     ...options
@@ -159,10 +160,12 @@ const jobsAPI = {
 
 // Applications API functions
 const applicationsAPI = {
-  submit: (applicationData) => apiRequest('/applications', {
-    method: 'POST',
-    body: JSON.stringify(applicationData)
-  }),
+  submit: (applicationData) => {
+    return apiRequest('/applications', {
+      method: 'POST',
+      body: applicationData
+    });
+  },
   
   getMyApplications: (params = {}) => {
     const queryString = new URLSearchParams(params).toString();

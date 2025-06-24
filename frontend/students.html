@@ -85,11 +85,8 @@
   </footer>
 
   <!-- Scripts -->
-   <script src="api.js"></script>
+  <script src="api.js"></script>
   <script>
-    // Load all jobs from localStorage
-    //let jobs = JSON.parse(localStorage.getItem('talenttrailJobs')) || [];
-
     let jobs = [];
 
     jobsAPI.getAll()
@@ -115,6 +112,7 @@
         jobList.innerHTML = `<p class="text-gray-500 text-center col-span-full">No jobs found matching your search.</p>`;
         return;
       }
+      
       filteredJobs.forEach(job => {
         const jobCard = document.createElement('div');
         jobCard.className = 'bg-gray-900 rounded-xl p-6 hover:bg-gray-800 transition shadow-lg flex flex-col justify-between';
@@ -133,10 +131,13 @@
           </div>
         `;
 
-        jobList.appendChild(jobCard);
-
+        // Add event listeners after creating the card
         const saveBtn = jobCard.querySelector('.saveJobBtn');
-        saveBtn.onclick = () => toggleSave(saveBtn, job.title);
+        saveBtn.addEventListener('click', () => {
+          toggleSave(saveBtn, job.title);
+        });
+
+        jobList.appendChild(jobCard);
       });
     }
 
@@ -157,7 +158,6 @@
       });
       renderJobs(filtered);
     }
-
   </script>
 
 </body>

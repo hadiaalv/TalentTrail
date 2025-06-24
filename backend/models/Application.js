@@ -1,47 +1,39 @@
 const mongoose = require('mongoose');
 
-const applicationSchema = new mongoose.Schema({
-  applicant: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  job: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Job',
-    required: true
-  },
+const simpleApplicationSchema = new mongoose.Schema({
   fullName: {
     type: String,
     required: [true, 'Full name is required'],
     trim: true,
-    maxlength: [100, 'Full name cannot exceed 100 characters']
+    minlength: [2, 'Full name must be between 2 and 100 characters'],
+    maxlength: [100, 'Full name must be between 2 and 100 characters']
   },
   email: {
     type: String,
     required: [true, 'Email is required'],
     trim: true,
     lowercase: true,
-    match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
+    match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please provide a valid email']
   },
   position: {
     type: String,
     required: [true, 'Position is required'],
     trim: true,
-    maxlength: [200, 'Position cannot exceed 200 characters']
+    minlength: [2, 'Position must be between 2 and 200 characters'],
+    maxlength: [200, 'Position must be between 2 and 200 characters']
   },
   coverLetter: {
     type: String,
     required: [true, 'Cover letter is required'],
     trim: true,
-    maxlength: [2000, 'Cover letter cannot exceed 2000 characters']
+    minlength: [10, 'Cover letter must be between 10 and 2000 characters'],
+    maxlength: [2000, 'Cover letter must be between 10 and 2000 characters']
   },
-  status: {
+  resume: {
     type: String,
-    enum: ['pending', 'reviewed', 'accepted', 'rejected'],
-    default: 'pending'
+    required: [true, 'Resume file is required']
   },
-  appliedAt: {
+  submittedAt: {
     type: Date,
     default: Date.now
   }
@@ -49,12 +41,4 @@ const applicationSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Indexes for efficient querying
-applicationSchema.index({ applicant: 1, createdAt: -1 });
-applicationSchema.index({ job: 1, status: 1 });
-applicationSchema.index({ status: 1, createdAt: -1 });
-
-// Prevent duplicate applications for same job
-applicationSchema.index({ applicant: 1, job: 1 }, { unique: true });
-
-module.exports = mongoose.model('Application', applicationSchema);
+module.exports = mongoose.model('SimpleApplication', simpleApplicationSchema);

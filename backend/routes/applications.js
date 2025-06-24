@@ -1,10 +1,42 @@
 const express = require('express');
 const Application = require('../models/Application');
-const Job = require('../models/Job');
 const { authenticateToken, requireRole } = require('../middleware/auth');
 const { body, validationResult } = require('express-validator');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 const router = express.Router();
+
+// Ensure uploads directory exists
+const uploadsDir = 'uploads/resumes';
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Configure Multer for resume uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadsDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`);
+  }
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
+  fileFilter: (req, file, cb) => {
+    const allowed = ['.pdf', '.doc', '.docx'];
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (!allowed.includes(ext)) {
+      return cb(new Error('Only PDF, DOC, and DOCX files are allowed'));
+    }
+    cb(null, true);
+  }
+});
 
 // Validation middleware for applications
 const validateApplication = [
@@ -38,50 +70,28 @@ const validateApplication = [
 ];
 
 // Submit job application
-router.post('/', authenticateToken, requireRole(['student']), validateApplication, async (req, res) => {
+router.post('/', authenticateToken, requireRole(['student']), upload.single('resume'), validateApplication, async (req, res) => {
   try {
-    const { jobId, fullName, email, position, coverLetter } = req.body;
+    const { fullName, email, position, coverLetter } = req.body;
 
-    // Check if job exists and is active
-    const job = await Job.findById(jobId);
-    if (!job || !job.isActive) {
-      return res.status(404).json({
-        success: false,
-        message: 'Job not found or no longer active'
-      });
-    }
-
-    if (job.deadline <= new Date()) {
+    if (!req.file) {
       return res.status(400).json({
         success: false,
-        message: 'Application deadline has passed'
+        message: 'Resume file is required'
       });
     }
 
-    // Check if user already applied
-    const existingApplication = await Application.findOne({
-      applicant: req.user._id,
-      job: jobId
-    });
-
-    if (existingApplication) {
-      return res.status(400).json({
-        success: false,
-        message: 'You have already applied for this job'
-      });
-    }
-
-    // Create application
     const application = new Application({
       applicant: req.user._id,
-      job: jobId,
       fullName,
       email,
       position,
-      coverLetter
+      coverLetter,
+      resume: req.file.filename
     });
 
     await application.save();
+    console.log('Application saved to DB');
 
     res.status(201).json({
       success: true,
@@ -98,16 +108,15 @@ router.post('/', authenticateToken, requireRole(['student']), validateApplicatio
   }
 });
 
-// Get user's applications (students only)
+// My applications route (students)
 router.get('/my-applications', authenticateToken, requireRole(['student']), async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 
     const applications = await Application.find({ applicant: req.user._id })
-      .populate('job', 'title company jobType location deadline')
       .sort({ createdAt: -1 })
-      .limit(limit * 1)
+      .limit(limit)
       .skip((page - 1) * limit);
 
     const total = await Application.countDocuments({ applicant: req.user._id });
@@ -133,101 +142,5 @@ router.get('/my-applications', authenticateToken, requireRole(['student']), asyn
   }
 });
 
-// Get applications for employer's jobs
-router.get('/job/:jobId', authenticateToken, requireRole(['employer']), async (req, res) => {
-  try {
-    const { jobId } = req.params;
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-
-    // Verify job belongs to employer
-    const job = await Job.findOne({ _id: jobId, postedBy: req.user._id });
-    if (!job) {
-      return res.status(404).json({
-        success: false,
-        message: 'Job not found or you do not have permission to view applications'
-      });
-    }
-
-    const applications = await Application.find({ job: jobId })
-      .populate('applicant', 'fullname email')
-      .sort({ createdAt: -1 })
-      .limit(limit * 1)
-      .skip((page - 1) * limit);
-
-    const total = await Application.countDocuments({ job: jobId });
-
-    res.json({
-      success: true,
-      data: {
-        applications,
-        job: {
-          title: job.title,
-          company: job.company
-        },
-        pagination: {
-          current: page,
-          pages: Math.ceil(total / limit),
-          total
-        }
-      }
-    });
-  } catch (error) {
-    console.error('Get job applications error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch job applications',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
-    });
-  }
-});
-
-// Update application status (employers only)
-router.patch('/:id/status', authenticateToken, requireRole(['employer']), async (req, res) => {
-  try {
-    const { status } = req.body;
-    
-    if (!['pending', 'reviewed', 'accepted', 'rejected'].includes(status)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid status value'
-      });
-    }
-
-    const application = await Application.findById(req.params.id)
-      .populate('job', 'postedBy title company');
-
-    if (!application) {
-      return res.status(404).json({
-        success: false,
-        message: 'Application not found'
-      });
-    }
-
-    // Verify job belongs to employer
-    if (application.job.postedBy.toString() !== req.user._id.toString()) {
-      return res.status(403).json({
-        success: false,
-        message: 'You do not have permission to update this application'
-      });
-    }
-
-    application.status = status;
-    await application.save();
-
-    res.json({
-      success: true,
-      message: 'Application status updated successfully',
-      data: { application }
-    });
-  } catch (error) {
-    console.error('Update application status error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to update application status',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
-    });
-  }
-});
 
 module.exports = router;

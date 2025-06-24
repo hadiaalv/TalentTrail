@@ -4,6 +4,7 @@ const User = require('../models/User');
 const authenticateToken = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
+    console.log('AUTH HEADER:', authHeader);
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
     if (!token) {
