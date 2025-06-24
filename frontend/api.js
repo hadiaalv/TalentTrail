@@ -23,30 +23,37 @@ const apiRequest = async (endpoint, options = {}) => {
   try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
     const data = await response.json();
-    
+
     if (!response.ok) {
-      // Preserve the full error structure from backend
-      const error = new Error(data.message || 'Request failed');
-      
+      // Create a more detailed error message
+      let errorMessage = data.message || 'Request failed';
+
+      // If there are validation errors, include them in the message
+      if (data.errors && Array.isArray(data.errors)) {
+        const validationErrors = data.errors.map(err => err.msg || err.message || err).join(', ');
+        errorMessage = `Validation failed: ${validationErrors}`;
+      }
+      const error = new Error(errorMessage);
       // Add validation errors if they exist
       if (data.errors && Array.isArray(data.errors)) {
         error.errors = data.errors;
       }
-      
       // Add success flag if it exists
       if (data.success !== undefined) {
         error.success = data.success;
       }
-      
+      // Add status code for debugging
+      error.status = response.status;
       throw error;
+
     }
-    
+
     return data;
   } catch (error) {
     console.error('API Request Error:', error);
-    
+
     // If it's a network error, wrap it properly
-    if (!error.message) {
+    if (!error.message || error.name === 'TypeError') {
       const networkError = new Error('Network error or server unavailable');
       throw networkError;
     }
@@ -73,7 +80,7 @@ const authAPI = {
     method: 'PUT',
     body: JSON.stringify(profileData)
   }),
-  
+
   logout: () => apiRequest('/auth/logout', { method: 'POST' })
 };
 
@@ -91,28 +98,60 @@ const jobsAPI = {
     const queryString = new URLSearchParams(params).toString();
     return apiRequest(`/jobs${queryString ? `?${queryString}` : ''}`);
   },
-  
+
   getMyJobs: (params = {}) => {
     const queryString = new URLSearchParams(params).toString();
     return apiRequest(`/jobs/my-jobs${queryString ? `?${queryString}` : ''}`);
   },
-  
+
   getById: (id) => apiRequest(`/jobs/${id}`),
-  
-  create: (jobData) => apiRequest('/jobs', {
-    method: 'POST',
-    body: JSON.stringify(jobData)
-  }),
-  
-  update: (id, jobData) => apiRequest(`/jobs/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(jobData)
-  }),
-  
+
+  create: (jobData) => {
+    // Clean and validate data before sending
+    const cleanedData = {
+      title: jobData.title?.trim(),
+      company: jobData.company?.trim(),
+      jobType: jobData.jobType,
+      location: jobData.location?.trim(),
+      description: jobData.description?.trim(),
+      deadline: jobData.deadline,
+      postedBy: jobData.postedBy
+    };
+
+    // Only include salary if it has a value
+    if (jobData.salary && jobData.salary !== '' && !isNaN(jobData.salary)) {
+      cleanedData.salary = Number(jobData.salary);
+    }
+    console.log('Sending cleaned job data:', cleanedData);
+    return apiRequest('/jobs', {
+      method: 'POST',
+      body: JSON.stringify(cleanedData)
+    });
+  },
+  update: (id, jobData) => {
+    // Clean and validate data before sending
+    const cleanedData = {
+      title: jobData.title?.trim(),
+      company: jobData.company?.trim(),
+      jobType: jobData.jobType,
+      location: jobData.location?.trim(),
+      description: jobData.description?.trim(),
+      deadline: jobData.deadline
+    };
+    // Only include salary if it has a value
+    if (jobData.salary && jobData.salary !== '' && !isNaN(jobData.salary)) {
+      cleanedData.salary = Number(jobData.salary);
+    }
+    return apiRequest(`/jobs/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(cleanedData)
+    });
+  },
+
   delete: (id) => apiRequest(`/jobs/${id}`, {
     method: 'DELETE'
   }),
-  
+
   apply: (id) => apiRequest(`/jobs/${id}/apply`, {
     method: 'POST'
   })
@@ -190,6 +229,46 @@ const showUnauthorizedMessage = () => {
   `;
 }
 
+const validateJobData = (jobData) => {
+  const errors = [];
+
+  if (!jobData.title || jobData.title.trim().length === 0) {
+    errors.push('Job title is required');
+  }
+
+  if (!jobData.company || jobData.company.trim().length === 0) {
+    errors.push('Company name is required');
+  }
+
+  if (!jobData.jobType || !['Full-time', 'Part-time', 'Internship', 'Remote'].includes(jobData.jobType)) {
+    errors.push('Valid job type is required');
+  }
+
+  if (!jobData.location || jobData.location.trim().length === 0) {
+    errors.push('Location is required');
+  }
+
+  if (!jobData.description || jobData.description.trim().length === 0) {
+    errors.push('Job description is required');
+  }
+
+  if (!jobData.deadline) {
+    errors.push('Application deadline is required');
+  } else {
+    const deadlineDate = new Date(jobData.deadline);
+    if (deadlineDate <= new Date()) {
+      errors.push('Application deadline must be in the future');
+    }
+  }
+
+  if (jobData.salary && (isNaN(jobData.salary) || Number(jobData.salary) < 0)) {
+    errors.push('Salary must be a valid positive number');
+  }
+
+  return errors;
+};
+
+
 //window explicitly makes your objects globally available to all inline scripts in HTML
 window.authAPI = authAPI;
 window.jobsAPI = jobsAPI;
@@ -197,3 +276,4 @@ window.contactAPI = contactAPI;
 window.applicationsAPI = applicationsAPI;
 window.checkAuth = checkAuth;
 window.requireAuth = requireAuth;
+window.validateJobData = validateJobData;

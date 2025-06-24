@@ -41,6 +41,7 @@
   });
 </script>
 
+
   <!-- Navbar -->
   <nav class="flex items-center justify-between px-6 py-4 bg-black text-white shadow-md">
     <div class="flex items-center space-x-6">
@@ -134,8 +135,9 @@
     © 2025 TalentTrail. All rights reserved.
   </footer>
 
-  CRUD Script
+  <!-- CRUD Script -->
   <script>
+
     const form = document.getElementById('jobPostForm');
     const jobsList = document.getElementById('jobsList');
     const submitBtn = document.getElementById('submitBtn');
@@ -143,57 +145,110 @@
     const jobIdInput = document.getElementById('jobId');
     const messageBox = document.getElementById('messageBox');
 
-    let jobs = JSON.parse(localStorage.getItem('talenttrailJobs')) || [];
+    function clearErrorMessages() {
+      const errorMessages = form.querySelectorAll('.error-message');
+      errorMessages.forEach(msg => {
+        msg.textContent = '';
+        msg.classList.add('hidden');
+      });
+      // Remove error styling from inputs
+      const inputs = form.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
+        input.classList.remove('border-red-500');
+      });
+    }
+
+    function showFieldError(fieldName, message) {
+      const field = form.querySelector(`[name="${fieldName}"]`);
+      if (field) {
+        const errorDiv = field.parentNode.querySelector('.error-message');
+        if (errorDiv) {
+          errorDiv.textContent = message;
+          errorDiv.classList.remove('hidden');
+          field.classList.add('border-red-500');
+        }
+      }
+    }
 
     // Enable submit button only if form is valid
+    function validateFormData() {
+      clearErrorMessages();
+      const formData = new FormData(form);
+      const jobData = Object.fromEntries(formData.entries());
+
+      // Use the validation function from api.js
+      const errors = window.validateJobData ? window.validateJobData(jobData) : [];
+
+      if (errors.length > 0) {
+        errors.forEach(error => {
+          if (error.includes('title')) showFieldError('title', error);
+          else if (error.includes('company')) showFieldError('company', error);
+          else if (error.includes('job type')) showFieldError('jobType', error);
+          else if (error.includes('location')) showFieldError('location', error);
+          else if (error.includes('description')) showFieldError('description', error);
+          else if (error.includes('deadline')) showFieldError('deadline', error);
+          else if (error.includes('salary')) showFieldError('salary', error);
+        });
+        return false;
+      }
+
+      return true;
+    }
+
     function validateForm() {
-      submitBtn.disabled = !form.checkValidity();
+      const isValid = validateFormData();
+      submitBtn.disabled = !isValid;
     }
 
     form.addEventListener('input', validateForm);
+    form.addEventListener('change', validateForm);
 
     // Display message
-    function showMessage(message) {
+    function showMessage(message, isError = false) {
       messageBox.textContent = message;
-      setTimeout(() => { messageBox.textContent = ''; }, 4000);
-    }
-
-    // Generate unique ID (prefer crypto if available)
-    function generateId() {
-      if (window.crypto && crypto.randomUUID) {
-        return crypto.randomUUID();
-      }
-      return Date.now().toString() + Math.floor(Math.random() * 1000);
+      messageBox.className = `mt-4 text-center font-semibold ${isError ? 'text-red-400' : 'text-lime-400'}`;
+      setTimeout(() => { messageBox.textContent = ''; }, 6000);
     }
 
     // Render jobs
-    function renderJobs() {
-      if (jobs.length === 0) {
-        jobsList.innerHTML = '<p class="text-gray-400 italic">No job postings yet. Add some!</p>';
-        return;
+    async function renderJobs() {
+      try {
+        const result = await jobsAPI.getMyJobs();
+        const jobs = result.data.jobs;
+
+        if (!jobs.length) {
+          jobsList.innerHTML = '<p class="text-gray-400 italic">No job postings yet. Add some!</p>';
+          return;
+        }
+
+        jobsList.innerHTML = jobs.map(job => `
+          <article class="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-700 fade-in" tabindex="0">
+            <h3 class="text-xl font-semibold text-lime-400">${job.title}</h3>
+            <p class="text-gray-300 mt-1"><strong>Company:</strong> ${job.company}</p>
+            <p class="text-gray-300 mt-1"><strong>Type:</strong> ${job.jobType}</p>
+            <p class="text-gray-300 mt-1"><strong>Location:</strong> ${job.location}</p>
+            <p class="text-gray-300 mt-4 whitespace-pre-line">${job.description}</p>
+            ${job.salary ? `<p class="text-gray-300 mt-4"><strong>Salary:</strong> $${job.salary.toLocaleString()}</p>` : ''}
+            <p class="text-gray-300 mt-2"><strong>Deadline:</strong> <time datetime="${job.deadline}">${new Date(job.deadline).toLocaleDateString()}</time></p>
+            <div class="mt-4 flex gap-4">
+              <button class="editBtn bg-lime-400 text-black px-4 py-2 rounded" data-id="${job._id}">Edit</button>
+              <button class="deleteBtn bg-red-600 text-white px-4 py-2 rounded" data-id="${job._id}">Delete</button>
+            </div>
+          </article>
+        `).join('');
+
+        // Add fade-in effect
+        const articles = jobsList.querySelectorAll('article');
+        articles.forEach((article, index) => {
+          article.style.animationDelay = `${index * 0.1}s`;
+          article.classList.add('fade-in');
+        });
+
+      } catch (error) {
+        showMessage('Failed to load your jobs.', true);
       }
-
-      jobsList.innerHTML = jobs.map(job => `
-        <article class="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-700 fade-in" tabindex="0" aria-label="Job posting for ${job.title} at ${job.company}">
-          <h3 class="text-xl font-semibold text-lime-400">${job.title}</h3>
-          <p class="text-gray-300 mt-1"><strong>Company:</strong> ${job.company}</p>
-          <p class="text-gray-300 mt-1"><strong>Type:</strong> ${job.jobType}</p>
-          <p class="text-gray-300 mt-1"><strong>Location:</strong> ${job.location}</p>
-          <p class="text-gray-300 mt-4 whitespace-pre-line">${job.description}</p>
-          ${job.salary ? `<p class="text-gray-300 mt-4"><strong>Salary:</strong> ${job.salary}</p>` : ''}
-          <p class="text-gray-300 mt-2"><strong>Deadline:</strong> <time datetime="${job.deadline}">${job.deadline}</time></p>
-          <div class="mt-6 flex flex-wrap gap-4">
-            <button class="editBtn bg-lime-400 text-black px-4 py-2 rounded hover:bg-lime-500 transition flex-1 min-w-[120px]" data-id="${job.id}">Edit</button>
-            <button class="deleteBtn bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition flex-1 min-w-[120px]" data-id="${job.id}">Delete</button>
-          </div>
-        </article>
-      `).join('');
     }
 
-    // Save jobs to localStorage
-    function saveJobs() {
-      localStorage.setItem('talenttrailJobs', JSON.stringify(jobs));
-    }
 
     // Reset form
     function resetForm() {
@@ -201,10 +256,12 @@
       jobIdInput.value = '';
       submitBtn.textContent = 'Post Job';
       submitBtn.disabled = true;
+      clearErrorMessages();
     }
 
+
     // Handle form submit (create/update)
-    form.addEventListener('submit', e => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       if (!form.checkValidity()) {
@@ -212,61 +269,89 @@
         return;
       }
 
+      // Set minimum date to today
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('deadline').setAttribute('min', today);
+
       const formData = new FormData(form);
-      const jobData = {};
-      formData.forEach((value, key) => jobData[key] = value.trim());
-
-      if (jobIdInput.value) {
-        // Update existing job
-        const index = jobs.findIndex(j => j.id === jobIdInput.value);
-        if (index !== -1) {
-          jobs[index] = { ...jobData, id: jobIdInput.value };
-          showMessage('Job updated successfully!');
-        }
-      } else {
-        // Create new job
-        jobData.id = generateId();
-        jobs.push(jobData);
-        showMessage('Job posted successfully!');
+      const jobData = Object.fromEntries(formData.entries());
+      console.log("Sending job data:", jobData);
+      jobData.deadline = new Date(jobData.deadline).toISOString();
+      if (jobData.salary) {
+        jobData.salary = Number(jobData.salary); // convert salary to number
       }
+      const user = JSON.parse(localStorage.getItem("talenttrailUser"));
+      console.log("User from localStorage:", user);
+      jobData.postedBy = user.id || user._id;
 
-      saveJobs();
-      renderJobs();
-      resetForm();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Posting...';
+
+        let res;
+        if (jobIdInput.value) {
+          res = await jobsAPI.update(jobIdInput.value, jobData);
+          showMessage('Job updated successfully!');
+        } else {
+          res = await jobsAPI.create(jobData);
+          showMessage('Job posted successfully!');
+        }
+
+
+        showMessage('Job posted successfully!');
+        resetForm();
+        renderJobs(); // Refresh job list from server
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (error) {
+        console.error('API error:', error);
+        showMessage(error.message || 'Failed to post job.', true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Post Job';
+      }
     });
 
+
     // Handle Edit/Delete using event delegation
-    jobsList.addEventListener('click', e => {
-      if (e.target.classList.contains('editBtn')) {
-        const id = e.target.dataset.id;
-        const job = jobs.find(j => j.id === id);
-        if (job) {
+    jobsList.addEventListener('click', async (e) => {
+      const target = e.target;
+      const id = target.dataset.id;
+
+      if (target.classList.contains('editBtn')) {
+        try {
+          const result = await jobsAPI.getById(id);
+          const job = result.data.job;
+
           form.title.value = job.title;
           form.company.value = job.company;
           form.jobType.value = job.jobType;
           form.location.value = job.location;
           form.description.value = job.description;
           form.salary.value = job.salary || '';
-          form.deadline.value = job.deadline;
-          jobIdInput.value = job.id;
+          form.deadline.value = job.deadline.split('T')[0];
+
+          jobIdInput.value = job._id;
           submitBtn.textContent = 'Update Job';
           submitBtn.disabled = false;
           window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (error) {
+          showMessage('Failed to load job for editing.');
         }
-      } else if (e.target.classList.contains('deleteBtn')) {
-        const id = e.target.dataset.id;
+
+      } else if (target.classList.contains('deleteBtn')) {
         if (confirm('Are you sure you want to delete this job posting?')) {
-          jobs = jobs.filter(j => j.id !== id);
-          saveJobs();
-          renderJobs();
-          if (jobIdInput.value === id) {
-            resetForm();
+          try {
+            await jobsAPI.delete(id);
+            showMessage('Job deleted successfully!');
+            renderJobs();
+            if (jobIdInput.value === id) resetForm();
+          } catch (error) {
+            showMessage('Failed to delete job.');
           }
-          showMessage('Job deleted successfully!');
         }
       }
     });
+
 
     // Clear form button
     clearBtn.addEventListener('click', () => {
@@ -274,9 +359,14 @@
       messageBox.textContent = '';
     });
 
+    // Set minimum date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('deadline').setAttribute('min', today);
+
     // Initial render on page load
     renderJobs();
     validateForm();
   </script>
+  <script src="api.js"></script>
 </body>
 </html>

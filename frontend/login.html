@@ -150,6 +150,7 @@
         
         // Store user data and token
         localStorage.setItem('talenttrailUser', JSON.stringify({
+          _id: response.data.user._id,
           email: response.data.user.email,
           role: response.data.user.role,
           token: response.data.token
