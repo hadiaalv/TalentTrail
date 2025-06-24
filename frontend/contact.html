@@ -34,7 +34,7 @@
       We’re here to help! Reach out to us with your questions or feedback.
     </p>
 
-    <form action="#" method="POST" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-xl text-left space-y-4 shadow-lg hover:shadow-lime-400 transition">
+    <form id="contactForm" action="#" method="POST" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-xl text-left space-y-4 shadow-lg hover:shadow-lime-400 transition" novalidate>
       <div>
         <label class="block text-sm text-lime-400 mb-1">Name</label>
         <input type="text" name="name" required placeholder="Your full name"
@@ -42,8 +42,10 @@
       </div>
       <div>
         <label class="block text-sm text-lime-400 mb-1">Email</label>
-        <input type="email" name="email" required placeholder="Your email address"
+        <input type="email" id="email" name="email" required placeholder="Your email address"
+          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|net|org|edu|gov|pk|info)$"
           class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-lime-400">
+        <small id="emailError" class="text-red-500 text-sm hidden mt-1">Please enter a valid email (e.g., user@example.com).</small>
       </div>
       <div>
         <label class="block text-sm text-lime-400 mb-1">Message</label>
@@ -61,6 +63,28 @@
   <footer class="bg-black border-t border-gray-800 text-center py-6 text-gray-500 text-sm">
     © 2025 TalentTrail. All rights reserved.
   </footer>
+
+  <!-- JavaScript -->
+  <script>
+    const form = document.getElementById("contactForm");
+    const emailInput = document.getElementById("email");
+    const emailError = document.getElementById("emailError");
+
+    form.addEventListener("submit", function (e) {
+      if (!emailInput.validity.valid) {
+        emailError.classList.remove("hidden");
+        e.preventDefault(); // prevent form submission
+      } else {
+        emailError.classList.add("hidden");
+        alert("Your message has been sent successfully!");
+        form.reset();
+      }
+    });
+
+    emailInput.addEventListener("input", () => {
+      emailError.classList.add("hidden");
+    });
+  </script>
 
 </body>
 </html>

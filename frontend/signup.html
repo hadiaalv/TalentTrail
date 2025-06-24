@@ -42,7 +42,9 @@
         <div>
           <label for="email" class="block mb-1 text-gray-400 font-semibold">Email Address <span class="text-red-500">*</span></label>
           <input id="email" name="email" type="email" placeholder="example@mail.com" required
+            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|net|org|edu|gov|pk|info)$"
             class="w-full px-4 py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-400 transition" />
+          <small class="text-red-500 hidden mt-1 text-sm" id="emailError">Please enter a valid email address (e.g., example@gmail.com).</small>
         </div>
 
         <div>
@@ -86,17 +88,26 @@
     © 2025 TalentTrail. All rights reserved.
   </footer>
 
+  <!-- JavaScript -->
   <script>
     const signupForm = document.getElementById('signupForm');
     const submitBtn = document.getElementById('submitBtn');
     const passwordInput = signupForm.password;
     const confirmPasswordInput = signupForm.confirmPassword;
     const passwordMismatchMsg = document.getElementById('passwordMismatch');
+    const emailInput = signupForm.email;
+    const emailError = document.getElementById('emailError');
 
-    // Enable submit button only if form is valid and passwords match
     function validateForm() {
       const isValid = signupForm.checkValidity();
       const passwordsMatch = passwordInput.value === confirmPasswordInput.value;
+      const emailValid = emailInput.validity.valid;
+
+      if (!emailValid && emailInput.value !== '') {
+        emailError.classList.remove('hidden');
+      } else {
+        emailError.classList.add('hidden');
+      }
 
       if (!passwordsMatch && confirmPasswordInput.value !== '') {
         passwordMismatchMsg.classList.remove('hidden');
@@ -104,7 +115,7 @@
         passwordMismatchMsg.classList.add('hidden');
       }
 
-      submitBtn.disabled = !(isValid && passwordsMatch);
+      submitBtn.disabled = !(isValid && passwordsMatch && emailValid);
     }
 
     signupForm.addEventListener('input', validateForm);
@@ -112,16 +123,13 @@
     signupForm.addEventListener('submit', e => {
       e.preventDefault();
 
-      // Here you would send data to your backend API for registration
-      // Example data to send: fullname, email, role, password
-
       alert('Registration successful! Please log in.');
 
       signupForm.reset();
       submitBtn.disabled = true;
       passwordMismatchMsg.classList.add('hidden');
+      emailError.classList.add('hidden');
 
-      // Redirect to login page or dashboard
       window.location.href = 'login.html';
     });
   </script>
