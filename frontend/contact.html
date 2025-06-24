@@ -53,10 +53,12 @@
           class="w-full px-4 py-2 rounded bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-lime-400"></textarea>
       </div>
       <button type="submit"
+        id="submitBtn"
         class="bg-lime-400 text-black px-6 py-2 rounded font-semibold hover:bg-lime-300 transition">
         Send Message
       </button>
     </form>
+    <div id="messageBox" class="hidden mt-4 text-center font-semibold"></div>
   </section>
 
   <!-- Footer -->
@@ -117,6 +119,7 @@
       }
     });
   </script>
+  <script src="api.js"></script>
 
 </body>
 </html>
