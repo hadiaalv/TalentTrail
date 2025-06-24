@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://cdn.tailwindcss.com"></script>
   <title>Sign Up | TalentTrail</title>
 </head>
@@ -32,18 +32,46 @@
     <div class="w-full max-w-md bg-gray-900 p-8 rounded-2xl shadow-lg hover:shadow-lime-400 transition duration-300">
       <h2 class="text-3xl font-bold text-lime-400 text-center mb-6">Create an Account</h2>
 
-      <form action="#" method="POST" class="space-y-5">
-        <input type="text" name="fullname" placeholder="Full Name" required
-          class="w-full px-4 py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-400 transition">
+      <form id="signupForm" action="#" method="POST" class="space-y-5" novalidate>
+        <div>
+          <label for="fullname" class="block mb-1 text-gray-400 font-semibold">Full Name <span class="text-red-500">*</span></label>
+          <input id="fullname" name="fullname" type="text" placeholder="Your full name" required
+            class="w-full px-4 py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-400 transition" />
+        </div>
 
-        <input type="email" name="email" placeholder="Email Address" required
-          class="w-full px-4 py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-400 transition">
+        <div>
+          <label for="email" class="block mb-1 text-gray-400 font-semibold">Email Address <span class="text-red-500">*</span></label>
+          <input id="email" name="email" type="email" placeholder="example@mail.com" required
+            class="w-full px-4 py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-400 transition" />
+        </div>
 
-        <input type="password" name="password" placeholder="Password" required
-          class="w-full px-4 py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-400 transition">
+        <div>
+          <label for="role" class="block mb-1 text-gray-400 font-semibold">Account Type <span class="text-red-500">*</span></label>
+          <select id="role" name="role" required
+            class="w-full px-4 py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-400 transition">
+            <option value="" disabled selected>Select your role</option>
+            <option value="student">Student</option>
+            <option value="employer">Employer</option>
+          </select>
+        </div>
 
-        <button type="submit"
-          class="w-full bg-lime-400 text-black py-3 rounded font-semibold hover:bg-lime-500 transition">Sign Up</button>
+        <div>
+          <label for="password" class="block mb-1 text-gray-400 font-semibold">Password <span class="text-red-500">*</span></label>
+          <input id="password" name="password" type="password" placeholder="Create a password" required
+            class="w-full px-4 py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-400 transition" />
+        </div>
+
+        <div>
+          <label for="confirmPassword" class="block mb-1 text-gray-400 font-semibold">Confirm Password <span class="text-red-500">*</span></label>
+          <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Re-enter your password" required
+            class="w-full px-4 py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-400 transition" />
+          <p id="passwordMismatch" class="hidden text-red-500 mt-1 text-sm" role="alert">Passwords do not match.</p>
+        </div>
+
+        <button type="submit" id="submitBtn"
+          class="w-full bg-lime-400 text-black py-3 rounded font-semibold hover:bg-lime-500 transition disabled:opacity-60 disabled:cursor-not-allowed" disabled>
+          Sign Up
+        </button>
       </form>
 
       <p class="text-sm text-center text-gray-400 mt-6">
@@ -57,6 +85,46 @@
   <footer class="bg-black border-t border-gray-800 text-center py-6 text-gray-500 text-sm mt-10">
     © 2025 TalentTrail. All rights reserved.
   </footer>
+
+  <script>
+    const signupForm = document.getElementById('signupForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const passwordInput = signupForm.password;
+    const confirmPasswordInput = signupForm.confirmPassword;
+    const passwordMismatchMsg = document.getElementById('passwordMismatch');
+
+    // Enable submit button only if form is valid and passwords match
+    function validateForm() {
+      const isValid = signupForm.checkValidity();
+      const passwordsMatch = passwordInput.value === confirmPasswordInput.value;
+
+      if (!passwordsMatch && confirmPasswordInput.value !== '') {
+        passwordMismatchMsg.classList.remove('hidden');
+      } else {
+        passwordMismatchMsg.classList.add('hidden');
+      }
+
+      submitBtn.disabled = !(isValid && passwordsMatch);
+    }
+
+    signupForm.addEventListener('input', validateForm);
+
+    signupForm.addEventListener('submit', e => {
+      e.preventDefault();
+
+      // Here you would send data to your backend API for registration
+      // Example data to send: fullname, email, role, password
+
+      alert('Registration successful! Please log in.');
+
+      signupForm.reset();
+      submitBtn.disabled = true;
+      passwordMismatchMsg.classList.add('hidden');
+
+      // Redirect to login page or dashboard
+      window.location.href = 'login.html';
+    });
+  </script>
 
 </body>
 </html>

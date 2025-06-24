@@ -56,6 +56,7 @@
       <option value="Internship">Internship</option>
       <option value="Full-time">Full-time</option>
       <option value="Part-time">Part-time</option>
+      <option value="Remote">Remote</option>
     </select>
 
     <select
@@ -91,44 +92,8 @@
 
   <!-- Scripts -->
   <script>
-    const jobs = [
-      {
-        title: "Frontend Developer Intern",
-        company: "TechNova",
-        location: "Remote",
-        locationType: "Remote",
-        type: "Internship",
-        description: "Work on real-world UI projects using React and Tailwind CSS.",
-        applyLink: "apply.html"
-      },
-      {
-        title: "Data Analyst Internship",
-        company: "DataVerse",
-        location: "On-site",
-        locationType: "On-site",
-        type: "Internship",
-        description: "Assist in analyzing large datasets and building reports with Python.",
-        applyLink: "apply.html"
-      },
-      {
-        title: "Marketing Intern",
-        company: "BrightBuzz",
-        location: "Remote",
-        locationType: "Remote",
-        type: "Internship",
-        description: "Support marketing campaigns and social media strategies.",
-        applyLink: "apply.html"
-      },
-      {
-        title: "Software Engineer Trainee",
-        company: "CodeCraft",
-        location: "Hybrid",
-        locationType: "Hybrid",
-        type: "Full-time",
-        description: "Learn and contribute to software development projects.",
-        applyLink: "apply.html"
-      }
-    ];
+    // Load all jobs from localStorage
+    let jobs = JSON.parse(localStorage.getItem('talenttrailJobs')) || [];
 
     const jobList = document.getElementById('jobList');
 
@@ -153,11 +118,11 @@
             <h3 class="text-2xl font-bold mb-2">${job.title}</h3>
             <p class="text-gray-400 mb-1"><strong>Company:</strong> ${job.company}</p>
             <p class="text-gray-400 mb-1"><strong>Location:</strong> ${job.location}</p>
-            <p class="text-gray-400 mb-1"><strong>Type:</strong> ${job.type}</p>
+            <p class="text-gray-400 mb-1"><strong>Type:</strong> ${job.jobType}</p>
             <p class="text-gray-400 mb-6">${job.description}</p>
           </div>
           <div class="flex space-x-4">
-            <a href="${job.applyLink}" class="bg-lime-400 text-black px-4 py-2 rounded font-semibold hover:bg-lime-300 transition flex-1 text-center" aria-label="Apply for ${job.title}">Apply Now</a>
+            <a href="apply.html" class="bg-lime-400 text-black px-4 py-2 rounded font-semibold hover:bg-lime-300 transition flex-1 text-center" aria-label="Apply for ${job.title}">Apply Now</a>
             <button aria-label="Save job ${job.title}" class="saveJobBtn bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded font-semibold transition flex-1">Save</button>
           </div>
         `;
@@ -179,8 +144,8 @@
                             job.company.toLowerCase().includes(query) ||
                             job.location.toLowerCase().includes(query);
 
-        const matchesType = typeFilter === "" || job.type === typeFilter;
-        const matchesLocation = locationFilter === "" || job.locationType === locationFilter;
+        const matchesType = typeFilter === "" || job.jobType === typeFilter;
+        const matchesLocation = locationFilter === "" || job.location === locationFilter || job.location.toLowerCase().includes(locationFilter.toLowerCase());
 
         return matchesText && matchesType && matchesLocation;
       });
