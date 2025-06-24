@@ -25,12 +25,32 @@ const apiRequest = async (endpoint, options = {}) => {
     const data = await response.json();
     
     if (!response.ok) {
-      throw new Error(data.message || 'Request failed');
+      // Preserve the full error structure from backend
+      const error = new Error(data.message || 'Request failed');
+      
+      // Add validation errors if they exist
+      if (data.errors && Array.isArray(data.errors)) {
+        error.errors = data.errors;
+      }
+      
+      // Add success flag if it exists
+      if (data.success !== undefined) {
+        error.success = data.success;
+      }
+      
+      throw error;
     }
     
     return data;
   } catch (error) {
     console.error('API Request Error:', error);
+    
+    // If it's a network error, wrap it properly
+    if (!error.message) {
+      const networkError = new Error('Network error or server unavailable');
+      throw networkError;
+    }
+    
     throw error;
   }
 };
@@ -169,3 +189,11 @@ const showUnauthorizedMessage = () => {
     </div>
   `;
 }
+
+//window explicitly makes your objects globally available to all inline scripts in HTML
+window.authAPI = authAPI;
+window.jobsAPI = jobsAPI;
+window.contactAPI = contactAPI;
+window.applicationsAPI = applicationsAPI;
+window.checkAuth = checkAuth;
+window.requireAuth = requireAuth;

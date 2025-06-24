@@ -42,7 +42,6 @@
         <div>
           <label for="email" class="block mb-1 text-gray-400 font-semibold">Email Address <span class="text-red-500">*</span></label>
           <input id="email" name="email" type="email" placeholder="example@mail.com" required
-            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|net|org|edu|gov|pk|info)$"
             class="w-full px-4 py-3 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-lime-400 transition" />
           <small class="text-red-500 hidden mt-1 text-sm" id="emailError">Please enter a valid email address (e.g., example@gmail.com).</small>
         </div>
@@ -89,6 +88,7 @@
   </footer>
 
   <!-- JavaScript -->
+  <script src="api.js"></script>
   <script>
     const signupForm = document.getElementById('signupForm');
     const submitBtn = document.getElementById('submitBtn');
@@ -120,18 +120,42 @@
 
     signupForm.addEventListener('input', validateForm);
 
-    signupForm.addEventListener('submit', e => {
+    signupForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      alert('Registration successful! Please log in.');
-
-      signupForm.reset();
       submitBtn.disabled = true;
-      passwordMismatchMsg.classList.add('hidden');
-      emailError.classList.add('hidden');
+      submitBtn.textContent = 'Signing up...';
 
-      window.location.href = 'login.html';
+      try {
+        const userData = {
+        fullname: signupForm.fullname.value.trim(),
+        email: signupForm.email.value.trim().toLowerCase(),
+        password: signupForm.password.value,
+        role: signupForm.role.value
+      };
+        alert('Registration successful! Please log in.');
+        window.location.href = 'login.html';
+
+        await authAPI.signup(userData);
+      } catch (error) {
+        // console.error('Signup failed details:', error);
+        // alert(error.errors?.join('\n') || error.message || 'Signup failed.');
+        if (error.errors && Array.isArray(error.errors)) {
+          const msgs = error.errors.map(e => `• ${e.msg}`).join('\n');
+          alert(`Validation failed:\n${msgs}`);
+        } else {
+          alert(error.message || 'Signup failed.');
+        }
+
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign Up';
+      }
     });
+
+    // Initial validation state
+    validateForm();
+
   </script>
 
 </body>

@@ -18,6 +18,7 @@ const generateToken = (userId) => {
 // Register new user
 router.post('/signup', validateSignup, async (req, res) => {
   try {
+    console.log("Received signup request:", req.body);
     const { fullname, email, password, role } = req.body;
 
     // Check if user already exists
