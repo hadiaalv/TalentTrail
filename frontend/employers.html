@@ -22,6 +22,25 @@
 </head>
 <body class="bg-black text-white font-sans">
 
+  <script>
+  const authUser = JSON.parse(localStorage.getItem("talenttrailUser"));
+
+  // If student, block access and redirect
+  if (authUser?.role === "student") {
+    alert("Access denied. Students are not authorized to access the Employers page.");
+    window.location.href = "mainpage.html"; // or any other safe page
+  }
+
+  // Optional: disable nav link for extra safety
+  window.addEventListener("DOMContentLoaded", () => {
+    const employerLink = document.querySelector('a[href="employers.html"]');
+    if (authUser?.role === "student" && employerLink) {
+      employerLink.classList.add("pointer-events-none", "opacity-50", "cursor-not-allowed");
+      employerLink.setAttribute("title", "Access not authorized");
+    }
+  });
+</script>
+
   <!-- Navbar -->
   <nav class="flex items-center justify-between px-6 py-4 bg-black text-white shadow-md">
     <div class="flex items-center space-x-6">
@@ -259,6 +278,5 @@
     renderJobs();
     validateForm();
   </script>
-
 </body>
 </html>

@@ -99,13 +99,18 @@
 
   fetch('http://localhost:5000/api/jobs')
     .then(res => res.json())
-    .then(data => {
-      jobs = data;
-      renderJobs(jobs);
+    .then(response => {
+      if (response.success && Array.isArray(response.data.jobs)) {
+        jobs = response.data.jobs;
+        renderJobs(jobs);
+      } else {
+        console.error('Unexpected job data format:', response);
+      }
     })
     .catch(err => {
       console.error('Failed to fetch jobs:', err);
     });
+
 
     const jobList = document.getElementById('jobList');
 
@@ -164,8 +169,6 @@
       renderJobs(filtered);
     }
 
-    // Initial render of all jobs on page load
-    renderJobs(jobs);
   </script>
 
 </body>
