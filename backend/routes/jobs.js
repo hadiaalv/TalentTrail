@@ -2,6 +2,7 @@ const express = require('express');
 const Job = require('../models/Job');
 const { validateJob } = require('../middleware/validation');
 const { authenticateToken, requireRole } = require('../middleware/auth');
+const mongoose = require('mongoose');
 
 const router = express.Router();
 
@@ -16,15 +17,12 @@ router.get('/', async (req, res) => {
 
     // Build query
     const query = { isActive: true, deadline: { $gt: new Date() } };
-    
     if (jobType && ['Full-time', 'Part-time', 'Internship', 'Remote'].includes(jobType)) {
       query.jobType = jobType;
     }
-    
     if (location) {
       query.location = { $regex: location, $options: 'i' };
     }
-    
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: 'i' } },
@@ -130,6 +128,11 @@ router.post('/', authenticateToken, requireRole(['employer']), validateJob, asyn
       ...req.body,
       postedBy: req.user._id
     };
+
+    console.log("Job creation hit");
+    console.log("Incoming data:", req.body);
+    console.log("User:", req.user);
+
 
     const job = new Job(jobData);
     await job.save();
